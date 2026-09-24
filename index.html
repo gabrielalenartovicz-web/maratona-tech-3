@@ -428,3 +428,107 @@
     </script>
 </body>
 </html>
+/111111111111111111111111111111111111111111111111
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fake News sobre Drones e Privacidade</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="hero">
+  <h1>Fake News sobre Drones e Privacidade</h1>
+  <p>Instituição: CEEP Agrícola | Professor: Adilson Redivo</p>
+  <div class="meta"><strong>Grupo:</strong> Código da Roça &nbsp;&nbsp; <strong>Turma:</strong> 1º ano A &nbsp;&nbsp; <strong>Área:</strong> Agropecuária</div>
+</header>
+
+<nav class="nav" aria-label="Navegação principal">
+  <button class="nav-btn active" data-tab="projeto">O Projeto</button>
+  <button class="nav-btn" data-tab="diagnostico">Diagnóstico e Riscos</button>
+  <button class="nav-btn" data-tab="guia">Guia de Recomendações</button>
+  <button class="nav-btn" data-tab="verificador">🔎 Verificador de Informação</button>
+  <button class="nav-btn" data-tab="quiz">📊 Aba de Perguntas (Quiz)</button>
+</nav>
+
+<main>
+<section id="projeto" class="tab active">
+  <div class="card">
+    <h2>Contextualização do Problema</h2>
+    <p><strong>Qual é o problema?</strong> Uma notícia falsa começou a circular nas redes sociais afirmando que todos os drones utilizados no agronegócio estão sendo usados para espionar propriedades rurais vizinhas, filmando trabalhadores, casas e plantações sem autorização.</p>
+    <p><strong>Causa-Raiz:</strong> O problema se espalha devido à desinformação intencional, busca por engajamento e, principalmente, pela <strong>falta de verificação</strong> das informações antes de compartilhá-las.</p>
+    <h3>Perfil Profissional Escolhido</h3>
+    <p>O <strong>Engenheiro Agrônomo</strong> foi o profissional selecionado para mitigar o impacto. Ele contribui orientando os produtores a utilizarem as tecnologias de forma responsável, garantindo a produtividade sem violar os limites éticos e legais de privacidade.</p>
+  </div>
+</section>
+
+<section id="diagnostico" class="tab">
+  <div class="card">
+    <h2>Diagnóstico de Riscos Sociais</h2>
+    <p>As Fake News geram sérios impactos em nossa sociedade. Veja a classificação identificada pela equipe:</p>
+    <table>
+      <thead><tr><th>Tipo de Impacto</th><th>Descrição do Risco</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Informacional</strong></td><td>Informações falsas confundem a população sobre o uso real dos drones.</td></tr>
+        <tr><td><strong>Econômico</strong></td><td>A desconfiança gerada pode prejudicar e atrasar a aceitação de novas tecnologias agrícolas.</td></tr>
+        <tr><td><strong>Emocional</strong></td><td>Notícias alarmistas geram medo coletivo e sentimento de insegurança.</td></tr>
+        <tr><td><strong>Coletivo</strong></td><td>Incentiva conflitos desnecessários entre vizinhos e destrói a confiança na comunidade rural.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="guia" class="tab">
+  <div class="card">
+    <h2>Guia de Recomendações Públicas</h2>
+    <p>Para construir um ecossistema digital seguro no meio rural, nossa campanha sugere ações práticas baseadas nas seguintes diretrizes:</p>
+    <ul>
+      <li><strong>Verifique sempre:</strong> Cheque a fonte, a data e a autoria antes de repassar qualquer notícia.</li>
+      <li><strong>Não exponha:</strong> Nunca divulgue fotos ou filmagens de propriedades vizinhas ou funcionários sem autorização prévia.</li>
+      <li><strong>Educação Digital:</strong> Promova palestras, cartilhas e dinâmicas nas comunidades e escolas agrícolas.</li>
+    </ul>
+    <h3>Mensagem Final da Equipe</h3>
+    <div class="quote">"Antes de compartilhar: Pare, pense e verifique!"</div>
+  </div>
+</section>
+
+<section id="verificador" class="tab">
+  <div class="card verifier-card">
+    <h2>Verificador de Informação</h2>
+    <p>Digite uma notícia, afirmação ou informação sobre drones, privacidade ou tecnologia no campo. A ferramenta analisará o conteúdo e indicará o que pode ser confirmado e o que precisa de cuidado.</p>
+
+    <label for="claim">Informação para verificar</label>
+    <textarea id="claim" maxlength="5000" placeholder="Ex.: Todo drone usado no agronegócio pode filmar qualquer propriedade sem autorização."></textarea>
+    <div class="counter"><span id="count">0</span>/5000</div>
+    <button id="verifyBtn" class="primary">🔎 Verificar informação</button>
+
+    <div id="loading" class="loading hidden">
+      <div class="spinner"></div>
+      <span>Analisando a informação...</span>
+    </div>
+
+    <div id="result" class="result hidden"></div>
+
+    <div class="notice">
+      <strong>Importante:</strong> uma IA pode cometer erros. Use o resultado como orientação e confira fontes confiáveis antes de compartilhar uma informação.
+    </div>
+  </div>
+</section>
+
+<section id="quiz" class="tab">
+  <div class="card quiz-card">
+    <h2>Módulo Interativo: Campanha de Combate aos Erros</h2>
+    <p>Responda às perguntas abaixo para testar seus conhecimentos e identificar boatos sobre tecnologias no campo. O sistema validará se sua resposta está correta imediatamente!</p>
+    <div id="questions"></div>
+    <div class="score" id="score">Respostas Corretas: 0 de 3</div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <p>© 2026 - Projeto Desenvolvido pela Equipe "Código da Roça" - CEEP Agrícola</p>
+  <p>Referências oficiais: ANPD | ANAC | Gov.br</p>
+</footer>
+<script src="script.js"></script>
+</body>
+</html>'''
