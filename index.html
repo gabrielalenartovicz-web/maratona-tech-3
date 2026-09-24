@@ -1,0 +1,430 @@
+!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Código da Roça - Drones e Privacidade</title>
+    <style>
+        :root {
+            --primary: #0066cc;
+            --secondary: #00b386;
+            --dark: #2c3e50;
+            --light: #f4f7f6;
+            --white: #ffffff;
+            --correct: #2ecc71;
+            --incorrect: #e74c3c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Cabeçalho Baseado no Slide 1 */
+        header {
+            background: linear-gradient(135deg, #0052d4, #4364f7, #6fb1fc);
+            color: var(--white);
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .meta-info {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* Menu de Navegação por Abas */
+        nav {
+            background-color: var(--white);
+            display: flex;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 15px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--dark);
+            cursor: pointer;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary);
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+        }
+
+        /* Conteúdo das Abas */
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .tab-content {
+            display: none;
+            background-color: var(--white);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            border-left: 5px solid var(--secondary);
+            padding-left: 10px;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* Estilização da Tabela do Slide 5 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
+        /* Interface do Quiz (Aba de Perguntas) */
+        .quiz-container {
+            margin-top: 20px;
+        }
+
+        .question-card {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #eee;
+        }
+
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-btn {
+            background-color: var(--white);
+            border: 2px solid #ddd;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover:not([disabled]) {
+            background-color: #f0f4f8;
+            border-color: var(--primary);
+        }
+
+        /* Estados de validação do Quiz */
+        .option-btn.correct {
+            background-color: #d4edda !important;
+            border-color: var(--correct) !important;
+            color: #155724;
+            font-weight: bold;
+        }
+
+        .option-btn.incorrect {
+            background-color: #f8d7da !important;
+            border-color: var(--incorrect) !important;
+            color: #721c24;
+        }
+
+        .feedback-text {
+            margin-top: 10px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .feedback-text.correct {
+            color: var(--correct);
+            display: block;
+        }
+
+        .feedback-text.incorrect {
+            color: var(--incorrect);
+            display: block;
+        }
+
+        .score-box {
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e6f7ff;
+            border-radius: 8px;
+            color: var(--primary);
+        }
+
+        /* Rodapé */
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+            font-size: 0.9rem;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cabeçalho (Slide 1) -->
+    <header>
+        <h1>Fake News sobre Drones e Privacidade</h1>
+        <p>Instituição: CEEP Agrícola | Professor: Adilson Redivo</p>
+        <div class="meta-info">
+            <span><strong>Grupo:</strong> Código da Roça</span>
+            <span><strong>Turma:</strong> 1º ano A</span>
+            <span><strong>Área:</strong> Agropecuária</span>
+        </div>
+    </header>
+
+    <!-- Navegação por Abas (Sumário Slide 2) -->
+    <nav>
+        <button class="tab-btn active" onclick="openTab(event, 'projeto')">O Projeto</button>
+        <button class="tab-btn" onclick="openTab(event, 'diagnostico')">Diagnóstico e Riscos</button>
+        <button class="tab-btn" onclick="openTab(event, 'recomendacoes')">Guia de Recomendações</button>
+        <button class="tab-btn" onclick="openTab(event, 'perguntas')">📊 Aba de Perguntas (Quiz)</button>
+    </nav>
+
+    <div class="container">
+        
+        <!-- ABA 1: O PROJETO (Slides 3, 4 e 7) -->
+        <div id="projeto" class="tab-content active">
+            <h2>Contextualização do Problema</h2>
+            <p><strong>Qual é o problema?</strong> Uma notícia falsa começou a circular nas redes sociais afirmando que todos os drones utilizados no agronegócio estão sendo usados para espionar propriedades rurais vizinhas, filmando trabalhadores, casas e plantações sem autorização.</p>
+            
+            <p><strong>Causa-Raiz:</strong> O problema se espalha devido à desinformação intencional, busca por engajamento e, principalmente, pela <strong>falta de verificação</strong> das informações antes de compartilhá-las.</p>
+            
+            <h3 style="margin: 20px 0 10px 0; color: var(--primary);">Perfil Profissional Escolhido</h3>
+            <p>O <strong>Engenheiro Agrônomo</strong> foi o profissional selecionado para mitigar o impacto. Ele contribui orientando os produtores a utilizarem as tecnologias de forma responsável, garantindo a produtividade sem violar os limites éticos e legais de privacidade.</p>
+        </div>
+
+        <!-- ABA 2: DIAGNÓSTICO E RISCOS (Slides 5 e 6) -->
+        <div id="diagnostico" class="tab-content">
+            <h2>Diagnóstico de Riscos Sociais</h2>
+            <p>As Fake News geram sérios impactos em nossa sociedade. Veja a classificação identificada pela equipe:</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tipo de Impacto</th>
+                        <th>Descrição do Risco</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Informacional</strong></td>
+                        <td>Informações falsas confundem a população sobre o uso real dos drones.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Econômico</strong></td>
+                        <td>A desconfiança gerada pode prejudicar e atrasar a aceitação de novas tecnologias agrícolas.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Emocional</strong></td>
+                        <td>Notícias alarmistas geram medo coletivo e sentimento de insegurança.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Coletivo</strong></td>
+                        <td>Incentiva conflitos desnecessários entre vizinhos e destrói a confiança na comunidade rural.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ABA 3: RECOMENDAÇÕES (Slides 8, 9 e 10) -->
+        <div id="recomendacoes" class="tab-content">
+            <h2>Guia de Recomendações Públicas</h2>
+            <p>Para construir um ecossistema digital seguro no meio rural, nossa campanha sugere ações práticas baseadas nas seguintes diretrizes:</p>
+            
+            <ul>
+                <li><strong>Verifique sempre:</strong> Cheque a fonte, a data e a autoria antes de repassar qualquer notícia.</li>
+                <li><strong>Não exponha:</strong> Nunca divulgue fotos ou filmagens de propriedades vizinhas ou funcionários sem autorização prévia.</li>
+                <li><strong>Educação Digital:</strong> Promova palestras, cartilhas e dinâmicas nas comunidades e escolas agrícolas.</li>
+            </ul>
+
+            <h3 style="margin-top:20px; color: var(--secondary);">Mensagem Final da Equipe</h3>
+            <p style="font-style: italic; font-size: 1.2rem; text-align: center; background: #f0fdf4; padding: 15px; border-radius: 6px;">
+                "Antes de compartilhar: Pare, pense e verifique!"
+            </p>
+        </div>
+
+        <!-- ABA 4: PERGUNTAS (QUIZ) -->
+        <div id="perguntas" class="tab-content">
+            <h2>Módulo Interativo: Campanha de Combate aos Erros</h2>
+            <p>Responda às perguntas abaixo para testar seus conhecimentos e identificar boatos sobre tecnologias no campo. O sistema validará se sua resposta está correta imediatamente!</p>
+            
+            <div class="question-card" id="q1">
+                <p class="question-text">1. De acordo com o projeto, qual é a principal causa-raiz para o espalhamento do boato dos drones?</p>
+                <div class="options-container">
+                    <button class="option-btn" onclick="checkAnswer(this, false, 'A principal causa-raiz identificada foi a falta de verificação antes de compartilhar.')">A) Mau funcionamento mecânico dos drones.</button>
+                    <button class="option-btn" onclick="checkAnswer(this, true, 'Correto! A falta de verificação permite o avanço rápido das Fake News.')">B) A falta de verificação das informações antes de compartilhá-las.</button>
+                    <button class="option-btn" onclick="checkAnswer(this, false, 'Incorreto. A IA pode ser usada, mas a negligência na checagem é o fator principal.')">C) O uso exclusivo de inteligência artificial avançada pelas fazendas.</button>
+                </div>
+                <div class="feedback-text"></div>
+            </div>
+
+            <div class="question-card" id="q2">
+                <p class="question-text">2. Qual impacto social é gerado quando produtores recusam novas tecnologias por medo de boatos?</p>
+                <div class="options-container">
+                    <button class="option-btn" onclick="checkAnswer(this, false, 'Incorreto. O impacto emocional envolve medo/ansiedade direta.')">A) Impacto Emocional.</button>
+                    <button class="option-btn" onclick="checkAnswer(this, true, 'Correto! Recusar tecnologia por desconfiança atrasa o setor e gera prejuízo econômico.')">B) Impacto Econômico.</button>
+                    <button class="option-btn" onclick="checkAnswer(this, false, 'Incorreto. Embora confunda, a rejeição financeira caracteriza perda de mercado.')">C) Impacto Ambiental.</button>
+                </div>
+                <div class="feedback-text"></div>
+            </div>
+
+            <div class="question-card" id="q3">
+                <p class="question-text">3. Quais são as três perguntas de ouro recomendadas pela equipe antes de compartilhar uma mensagem?</p>
+                <div class="options-container">
+                    <button class="option-btn" onclick="checkAnswer(this, false, 'Incorreto. O preço e o modelo do drone não ajudam a checar a veracidade do boato.')">A) Qual o preço do drone? Quem é o fabricante? Ele filma em HD?</button>
+                    <button class="option-btn" onclick="checkAnswer(this, false, 'Incorreto. Essas perguntas não validam a segurança da informação.')">B) O vizinho tem internet? A plantação é grande? Quantos robôs existem lá?</button>
+                    <button class="option-btn" onclick="checkAnswer(this, true, 'Correto! Avaliar o autor, as provas e o respeito à privacidade impede a desinformação.')">C) Quem publicou? Existem provas e outras fontes? Respeita a privacidade?</button>
+                </div>
+                <div class="feedback-text"></div>
+            </div>
+
+            <div class="score-box" id="score-display">
+                Respostas Corretas: <span id="correct-count">0</span> de 3
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 - Projeto Desenvolvido pela Equipe "Código da Roça" - CEEP Agrícola</p>
+        <p style="font-size: 0.8rem; margin-top: 5px;">Referências oficiais: ANPD | ANAC | Gov.br</p>
+    </footer>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+                tabcontent[i].classList.remove("active");
+            }
+            
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).style.display = "block";
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        let answeredQuestions = new Set();
+        let correctAnswersCount = 0;
+
+        function checkAnswer(button, isCorrect, feedbackMessage) {
+            const questionCard = button.closest('.question-card');
+            const questionId = questionCard.id;
+
+            if (answeredQuestions.has(questionId)) {
+                return;
+            }
+
+            const buttons = questionCard.querySelectorAll('.option-btn');
+            buttons.forEach(btn => btn.setAttribute('disabled', 'true'));
+
+            const feedbackDiv = questionCard.querySelector('.feedback-text');
+            feedbackDiv.textContent = feedbackMessage;
+
+            if (isCorrect) {
+                button.classList.add('correct');
+                feedbackDiv.classList.add('correct');
+                correctAnswersCount++;
+            } else {
+                button.classList.add('incorrect');
+                feedbackDiv.classList.add('incorrect');
+                
+                buttons.forEach(btn => {
+                    if(btn.getAttribute('onclick').includes('true')) {
+                        btn.classList.add('correct');
+                    }
+                });
+            }
+
+            answeredQuestions.add(questionId);
+            document.getElementById('correct-count').textContent = correctAnswersCount;
+        }
+    </script>
+</body>
+</html>
