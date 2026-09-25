@@ -1,6 +1,3 @@
-script_js = r'''const navButtons = document.querySelectorAll(".nav-btn");
-const tabs = document.querySelectorAll(".tab");
-
 <script>
 const navButtons = document.querySelectorAll(".nav-btn");
 const tabs = document.querySelectorAll(".tab");
