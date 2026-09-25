@@ -1,6 +1,10 @@
 script_js = r'''const navButtons = document.querySelectorAll(".nav-btn");
 const tabs = document.querySelectorAll(".tab");
 
+<script>
+const navButtons = document.querySelectorAll(".nav-btn");
+const tabs = document.querySelectorAll(".tab");
+
 navButtons.forEach(btn => {
   btn.addEventListener("click", () => {
     navButtons.forEach(b => b.classList.remove("active"));
@@ -122,111 +126,7 @@ questions.forEach((item, qi) => {
   });
   qContainer.appendChild(box);
 });
-'''
 
-api_js = r'''const OpenAI = require("openai");
-
-module.exports = async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Método não permitido." });
-  }
-
-  const claim = String(req.body?.claim || "").trim();
-  if (!claim) return res.status(400).json({ error: "Informe uma afirmação." });
-  if (claim.length > 5000) return res.status(400).json({ error: "A informação é muito longa." });
-
-  if (!process.env.OPENAI_API_KEY) {
-    return res.status(500).json({ error: "OPENAI_API_KEY não configurada na Vercel." });
-  }
-
-  try {
-    const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-    const response = await client.responses.create({
-      model: process.env.OPENAI_MODEL || "gpt-5.6-luna",
-      tools: [{ type: "web_search" }],
-      input: `Você é um verificador educativo de informações para um projeto escolar brasileiro sobre fake news, drones, privacidade e tecnologia no agronegócio.
-
-Analise a afirmação abaixo. Pesquise na web quando necessário. Não invente fontes.
-Classifique como exatamente uma destas opções:
-VERDADEIRA = a afirmação está de acordo com evidências confiáveis.
-FALSA = a afirmação contradiz evidências confiáveis.
-INCONCLUSIVA = não há evidência suficiente para confirmar ou negar.
-
-Se for FALSA, explique claramente qual é a informação verdadeira ou mais precisa.
-Se houver contexto importante, explique de forma simples.
-Priorize fontes oficiais e fontes jornalísticas ou acadêmicas confiáveis.
-Não trate uma postagem de rede social como prova por si só.
-
-Retorne SOMENTE um JSON válido neste formato:
-{
-  "verdict": "VERDADEIRA|FALSA|INCONCLUSIVA",
-  "explanation": "explicação curta e clara",
-  "true_information": "o que é verdadeiro ou mais preciso; vazio se não necessário",
-  "sources": [{"title":"nome da fonte","url":"URL"}]
-}
-
-Afirmação para verificar:
-${claim}`
-    });
-
-    const text = response.output_text || "";
-    const match = text.match(/\{[\s\S]*\}/);
-    if (!match) throw new Error("A IA não retornou um resultado estruturado.");
-
-    const data = JSON.parse(match[0]);
-    if (!["VERDADEIRA","FALSA","INCONCLUSIVA"].includes(data.verdict)) {
-      data.verdict = "INCONCLUSIVA";
-    }
-    data.sources = Array.isArray(data.sources) ? data.sources.slice(0, 6) : [];
-    return res.status(200).json(data);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Erro ao consultar a IA. Tente novamente." });
-  }
-};
-'''
-
-package_json = r'''{
-  "name": "maratona-tech-drones-privacidade",
-  "version": "1.0.0",
-  "private": true,
-  "dependencies": {
-    "openai": "^5.0.0"
-  }
-}
-'''
-
-readme = r'''# Site Maratona Tech — Código da Roça
-
-Esta versão mantém o conteúdo e o visual mostrado nas capturas e acrescenta:
-**Guia de Recomendações → Verificador de Informação → Quiz**.
-
-## Como colocar a IA para funcionar na Vercel
-
-1. Crie um projeto na Vercel a partir desta pasta.
-2. A Vercel detectará o arquivo `api/verify.js` como uma função.
-3. Em **Settings → Environment Variables**, crie:
-   - `OPENAI_API_KEY` = sua chave da API.
-   - opcional: `OPENAI_MODEL` = `gpt-5.6-luna`
-4. Faça um novo deploy.
-
-A chave fica somente no servidor, dentro da variável de ambiente. Não coloque a chave diretamente no `script.js`.
-
-## Observação
-O verificador usa pesquisa na web pela API para procurar evidências e devolve:
-- VERDADEIRA
-- FALSA
-- INCONCLUSIVA
-
-A ferramenta é educativa e deve ser apresentada como apoio à verificação, não como garantia absoluta de verdade.
-'''
-
-(root / "index.html").write_text(index_html, encoding="utf-8")
-(root / "style.css").write_text(style_css, encoding="utf-8")
-(root / "script.js").write_text(script_js, encoding="utf-8")
-(root / "api" / "verify.js").write_text(api_js, encoding="utf-8")
-(root / "package.json").write_text(package_json, encoding="utf-8")
-(root / "README.md").write_text(readme, encoding="utf-8")
-
-zip_path = Path("/mnt/data/maratona-tech-recriado.zip")
+</script>
+</body>
+</html>
