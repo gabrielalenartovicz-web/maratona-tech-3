@@ -1,231 +1,549 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fake News sobre Drones e Privacidade</title>
- 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Código da Roça - Fake News, Drones e Privacidade</title>
+    <style>
+        :root {
+            --bg-primary: #f0f7ff;
+            --bg-secondary: #ffffff;
+            --bg-sidebar: #1e3a8a;
+            --sidebar-text: #ffffff;
+            --sidebar-hover: #2563eb;
+            --sidebar-active: #3b82f6;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --accent: #2563eb;
+            --accent-light: #dbeafe;
+            --danger: #ef4444;
+            --success: #10b981;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0d9488 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+        }
+
+        header h1 {
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .meta-info {
+            text-align: right;
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .main-wrapper {
+            display: flex;
+            flex: 1;
+            max-width: 1400px;
+            width: 100%;
+            margin: 1.5rem auto;
+            padding: 0 1rem;
+            gap: 1.5rem;
+        }
+
+        /* Sidebar com Abas */
+        .sidebar {
+            width: 300px;
+            background-color: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            height: fit-content;
+        }
+
+        .sidebar-header {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            padding: 0.5rem;
+            font-weight: 700;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 0.5rem;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-main);
+            padding: 0.85rem 1rem;
+            border-radius: 8px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tab-btn:hover {
+            background-color: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .tab-btn.active {
+            background-color: var(--accent);
+            color: white;
+            font-weight: 600;
+        }
+
+        /* Painel de Conteúdo */
+        .content-panel {
+            flex: 1;
+            background-color: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            min-height: 600px;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: #1e3a8a;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--accent-light);
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: #0f172a;
+            margin: 1.5rem 0 0.75rem 0;
+        }
+
+        p {
+            line-height: 1.6;
+            color: #334155;
+            margin-bottom: 1rem;
+            font-size: 1.05rem;
+        }
+
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .alert-box {
+            background-color: #fee2e2;
+            border-left: 5px solid var(--danger);
+            padding: 1.25rem;
+            border-radius: 4px;
+            margin: 1.5rem 0;
+            color: #991b1b;
+        }
+
+        .alert-box h4 {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .info-card {
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border);
+            padding: 1.25rem;
+            border-radius: 8px;
+            border-top: 4px solid var(--accent);
+        }
+
+        .info-card h4 {
+            color: #1e3a8a;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .impact-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        .impact-table th, .impact-table td {
+            border: 1px solid var(--border);
+            padding: 0.75rem 1rem;
+            text-align: left;
+        }
+
+        .impact-table th {
+            background-color: var(--accent-light);
+            color: #1e3a8a;
+            font-weight: 600;
+        }
+
+        .impact-table tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        .team-list {
+            list-style: none;
+            margin-left: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .team-member {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            color: #1e3a8a;
+            border: 1px solid var(--border);
+        }
+
+        .n3-badge {
+            background-color: #fef9c3;
+            color: #713f12;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border: 1px solid #fef08a;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .link-ref {
+            display: inline-block;
+            background-color: var(--bg-primary);
+            color: var(--accent);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            border: 1px solid var(--border);
+        }
+
+        .link-ref:hover {
+            background-color: var(--accent-light);
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+            background-color: var(--bg-secondary);
+            margin-top: auto;
+        }
+
+        @media (max-width: 850px) {
+            .main-wrapper {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-<header class="hero">
-  <h1>Fake News sobre Drones e Privacidade</h1>
-  <p>Instituição: CEEP Agrícola | Professor: Adilson Redivo</p>
-  <div class="meta"><strong>Grupo:</strong> Código da Roça &nbsp;&nbsp; <strong>Turma:</strong> 1º ano A &nbsp;&nbsp; <strong>Área:</strong> Agropecuária</div>
-</header>
 
-<nav class="nav" aria-label="Navegação principal">
-  <button class="nav-btn active" data-tab="projeto">O Projeto</button>
-  <button class="nav-btn" data-tab="diagnostico">Diagnóstico e Riscos</button>
-  <button class="nav-btn" data-tab="guia">Guia de Recomendações</button>
-  <button class="nav-btn" data-tab="verificador">🔎 Verificador de Informação</button>
-  <button class="nav-btn" data-tab="quiz">📊 Aba de Perguntas (Quiz)</button>
-</nav>
+    <header>
+        <div>
+            <h1>🌾 Grupo: Código da Roça</h1>
+            <p style="font-size: 0.9rem; margin-bottom: 0;">Projeto Prático de Conscientização Digital</p>
+        </div>
+        <div class="meta-info">
+            <strong>CEEP Agrícola Professor Adilson Redivo</strong><br>
+            Turma: 1º ano A | <span class="n3-badge">⚡ Nível 3</span>
+        </div>
+    </header>
 
-<main>
-<section id="projeto" class="tab active">
-  <div class="card">
-    <h2>Contextualização do Problema</h2>
-    <p><strong>Qual é o problema?</strong> Uma notícia falsa começou a circular nas redes sociais afirmando que todos os drones utilizados no agronegócio estão sendo usados para espionar propriedades rurais vizinhas, filmando trabalhadores, casas e plantações sem autorização.</p>
-    <p><strong>Causa-Raiz:</strong> O problema se espalha devido à desinformação intencional, busca por engajamento e, principalmente, pela <strong>falta de verificação</strong> das informações antes de compartilhá-las.</p>
-    <h3>Perfil Profissional Escolhido</h3>
-    <p>O <strong>Engenheiro Agrônomo</strong> foi o profissional selecionado para mitigar o impacto. Ele contribui orientando os produtores a utilizarem as tecnologias de forma responsável, garantindo a produtividade sem violar os limites éticos e legais de privacidade.</p>
-  </div>
-</section>
+    <div class="main-wrapper">
+        <nav class="sidebar">
+            <div class="sidebar-header">Navegação do Projeto</div>
+            <button class="tab-btn active" onclick="openTab(event, 'capa')">📋 Apresentação</button>
+            <button class="tab-btn" onclick="openTab(event, 'problema')">⚠️ O Problema Digital</button>
+            <button class="tab-btn" onclick="openTab(event, 'perfil')">🧑‍🌾 Perfil Profissional</button>
+            <button class="tab-btn" onclick="openTab(event, 'analise')">🔍 Diagnóstico e Riscos</button>
+            <button class="tab-btn" onclick="openTab(event, 'recomendacoes')">🛡️ Guia de Recomendações</button>
+            <button class="tab-btn" onclick="openTab(event, 'campanha')">🚨 Campanha de Combate</button>
+            <button class="tab-btn" onclick="openTab(event, 'conclusao')">✨ Conclusão e Referências</button>
+        </nav>
 
-<section id="diagnostico" class="tab">
-  <div class="card">
-    <h2>Diagnóstico de Riscos Sociais</h2>
-    <p>As Fake News geram sérios impactos em nossa sociedade. Veja a classificação identificada pela equipe:</p>
-    <table>
-      <thead><tr><th>Tipo de Impacto</th><th>Descrição do Risco</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Informacional</strong></td><td>Informações falsas confundem a população sobre o uso real dos drones.</td></tr>
-        <tr><td><strong>Econômico</strong></td><td>A desconfiança gerada pode prejudicar e atrasar a aceitação de novas tecnologias agrícolas.</td></tr>
-        <tr><td><strong>Emocional</strong></td><td>Notícias alarmistas geram medo coletivo e sentimento de insegurança.</td></tr>
-        <tr><td><strong>Coletivo</strong></td><td>Incentiva conflitos desnecessários entre vizinhos e destrói a confiança na comunidade rural.</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
+        <main class="content-panel">
+            <div id="capa" class="tab-content active">
+                <h2>Fakes News sobre Drones e Privacidade</h2>
+                <p>Este ambiente digital consolida a pesquisa, análise e recomendações públicas desenvolvidas pelo grupo para diagnosticar e mitigar o impacto de notícias falsas associadas ao avanço tecnológico no campo.</p>
+                
+                <h3>Integrantes da Equipe:</h3>
+                <div class="team-list">
+                    <div class="team-member">Bianca Nazario Ferreira</div>
+                    <div class="team-member">Gabriela Lenartovicz</div>
+                    <div class="team-member">Ariadne Gondim Feliz</div>
+                    <div class="team-member">Kauenni Plancheski Reigel</div>
+                </div>
 
-<section id="guia" class="tab">
-  <div class="card">
-    <h2>Guia de Recomendações Públicas</h2>
-    <p>Para construir um ecossistema digital seguro no meio rural, nossa campanha sugere ações práticas baseadas nas seguintes diretrizes:</p>
-    <ul>
-      <li><strong>Verifique sempre:</strong> Cheque a fonte, a data e a autoria antes de repassar qualquer notícia.</li>
-      <li><strong>Não exponha:</strong> Nunca divulgue fotos ou filmagens de propriedades vizinhas ou funcionários sem autorização prévia.</li>
-      <li><strong>Educação Digital:</strong> Promova palestras, cartilhas e dinâmicas nas comunidades e escolas agrícolas.</li>
-    </ul>
-    <h3>Mensagem Final da Equipe</h3>
-    <div class="quote">"Antes de compartilhar: Pare, pense e verifique!"</div>
-  </div>
-</section>
+                <div class="info-card" style="margin-top: 2rem;">
+                    <h4>Sumário da Apresentação</h4>
+                    <p>Navegue pelas abas laterais para visualizar a estrutura completa do nosso artefato:</p>
+                    <ul>
+                        <li>Identificação da causa-raiz da desinformação rural.</li>
+                        <li>Análise de impactos sociais (Informacional, Econômico, Emocional e Coletivo).</li>
+                        <li>Diretrizes de proteção embasadas pelo Engenheiro Agrônomo.</li>
+                        <li>Campanha prática de verificação em 3 passos.</li>
+                    </ul>
+                </div>
+            </div>
 
-<section id="verificador" class="tab">
-  <div class="card verifier-card">
-    <h2>Verificador de Informação</h2>
-    <p>Digite uma notícia, afirmação ou informação sobre drones, privacidade ou tecnologia no campo. A ferramenta analisará o conteúdo e indicará o que pode ser confirmado e o que precisa de cuidado.</p>
+            <div id="problema" class="tab-content">
+                <h2>1. Descrição do Problema Digital</h2>
+                <div class="alert-box">
+                    <h4>🚨 O Boato Circulante</h4>
+                    <p>"Uma notícia falsa começa a circular nas redes sociais afirmando que todos os drones utilizados no agronegócio estão sendo usados para espionar propriedades rurais vizinhas, filmando trabalhadores, casas e plantações sem autorização."</p>
+                </div>
 
-    <label for="claim">Informação para verificar</label>
-    <textarea id="claim" maxlength="5000" placeholder="Ex.: Todo drone usado no agronegócio pode filmar qualquer propriedade sem autorização."></textarea>
-    <div class="counter"><span id="count">0</span>/5000</div>
-    <button id="verifyBtn" class="primary">🔎 Verificar informação</button>
+                <h3>O que aconteceu na realidade?</h3>
+                <p>Foram vazadas na internet imagens de plantações, trabalhadores e propriedades rurais privadas. A falta de contexto dessas imagens serviu como combustível para boatos maliciosos.</p>
+                
+                <h3>Onde circulou?</h3>
+                <p>Redes sociais, sites e plataformas digitais de amplo alcance.</p>
 
-    <div id="loading" class="loading hidden">
-      <div class="spinner"></div>
-      <span>Analisando a informação...</span>
+                <h3>Quem foi impactado inicialmente?</h3>
+                <p>Os produtos rurais, que passaram a encarar a tecnologia com receio.</p>
+
+                <h3>Por que isso é preocupante?</h3>
+                <ul>
+                    <li>Pode causar medo e desconfiança entre produtores rurais vizinhos.</li>
+                    <li>Prejudica diretamente a imagem e adoção de drones legítimos na agricultura.</li>
+                    <li>Gera conflitos desnecessários e quebra a harmonia nas comunidades.</li>
+                    <li>Confunde a população sobre os limites legais do uso de dados e imagens.</li>
+                </ul>
+            </div>
+
+            <div id="perfil" class="tab-content">
+                <h2>2. Perfil Profissional Escolhido</h2>
+                <div style="background-color: #f0fdf4; border-left: 5px solid #16a34a; padding: 1.25rem; border-radius: 4px; margin-bottom: 1.5rem;">
+                    <h3 style="margin-top:0; color:#14532d;">🌱 Engenheiro Agrônomo</h3>
+                    <p style="color: #166534; margin-bottom:0;">A autoridade técnica qualificada para integrar tecnologia e respeito à comunidade rural.</p>
+                </div>
+
+                <h3>Como este profissional contribui para a resolução do problema?</h3>
+                <p>O Engenheiro Agrônomo atua como uma ponte educativa essencial. Ele orienta os produtores e operadores a utilizarem os drones de forma estritamente responsável e profissional, garantindo que o plano de voo e a captação de imagens respeitem rigorosamente a privacidade de trabalhadores e das propriedades vizinhas.</p>
+                <p>Ao validar os reais propósitos do monitoramento aéreo (como mapeamento de falhas ou detecção de pragas), ele neutraliza narrativas fantasiosas de espionagem com fatos científicos e operacionais.</p>
+            </div>
+
+            <div id="analise" class="tab-content">
+                <h2>3. Causa-Raiz e Diagnóstico de Riscos</h2>
+                
+                <h3>Identificação da Causa-Raiz</h3>
+                <p>O problema se espalha e ganha força por conta de dois fatores centrais:</p>
+                <ul>
+                    <li><strong>Falta de verificação:</strong> Ausência do hábito de checar dados antes do compartilhamento.</li>
+                    <li><strong>Busca por engajamento:</strong> Divulgação intencional de conteúdos chamativos e alarmistas para atrair atenção e cliques nas redes sociais.</li>
+                </ul>
+
+                <h3>Diagnóstico dos Riscos Sociais</h3>
+                <p>Abaixo estão mapeados os quatro pilares de impactos negativos gerados por essa desinformação:</p>
+                
+                <table class="impact-table">
+                    <thead>
+                        <tr>
+                            <th>Tipo de Impacto</th>
+                            <th>Descrição Concreta do Risco</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Informacional</strong></td>
+                            <td>Informações falsas confundem a população sobre o verdadeiro papel técnico dos drones.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Econômico</strong></td>
+                            <td>A desconfiança gerada pode boicotar ou atrasar a aceitação de tecnologias agrícolas produtivas.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Emocional</strong></td>
+                            <td>Notícias excessivamente alarmistas causam medo, ansiedade e insegurança nos trabalhadores.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Coletivo</strong></td>
+                            <td>Provoca o surgimento de conflitos diretos entre vizinhos e alimenta a desconfiança mútua na comunidade rural.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Fundamentação da Análise</h3>
+                <p>Nossa análise demonstra de forma clara que uma notícia desprovida de fontes verificáveis e sem evidências sólidas jamais deve ser tratada como verdade. Os drones são ferramentas aliadas da agricultura moderna, mas seu uso precisa caminhar lado a lado com o direito à privacidade. A checagem de fontes e a responsabilidade digital são os únicos caminhos para manter o ecossistema tecnológico seguro.</p>
+            </div>
+
+            <div id="recomendacoes" class="tab-content">
+                <h2>4. Guia de Recomendações Públicas</h2>
+                <p>Com o objetivo de diminuir a incidência de desinformação e garantir o uso correto da tecnologia, o grupo estruturou as seguintes diretrizes:</p>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h4>Ações Práticas Rápidas</h4>
+                        <ul>
+                            <li>Sempre verificar a fonte original, a data e a autoria das notícias antes de passar adiante.</li>
+                            <li>Comparar os boatos suspeitos com portais de notícias e checagem consolidados.</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h4>Boas Práticas de Privacidade</h4>
+                        <ul>
+                            <li>Não filmar nem divulgar imagens de colaboradores ou propriedades sem consentimento prévio.</li>
+                            <li>Estabelecer faixas de voo restritas longe de residências.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Medidas Educativas Propostas</h3>
+                <ol>
+                    <li><strong>Campanhas Educativas:</strong> Promover rotinas de esclarecimento contínuo sobre fake news e proteção de dados no ecossistema agrônomo.</li>
+                    <li><strong>Fomento ao Diálogo:</strong> Incentivar conversas transparentes entre os produtores locais e os moradores das comunidades vizinhas.</li>
+                    <li><strong>Inclusão Pedagógica:</strong> Ensinar estudantes, moradores e jovens filhos de agricultores a utilizarem as inovações do campo com ética e segurança digital.</li>
+                </ol>
+            </div>
+
+            <div id="campanha" class="tab-content">
+                <h2>5. Campanha: Verifique, Respeite, Compartilhe</h2>
+                
+                <div style="border: 2px dashed var(--accent); padding: 2rem; border-radius: 8px; background-color: #fafafa;">
+                    <span class="n3-badge" style="background-color: var(--danger); color: white; border: none; margin-bottom: 1rem;">🚨 EXEMPLO DE NOTÍCIA FICTÍCIA</span>
+                    <h3 style="margin-top:0; color: var(--danger);">“Todos os drones do agronegócio estão espionando propriedades vizinhas!”</h3>
+                    <p style="color: #475569;"><em>Atenção: A afirmação acima é enganosa, alarmista e não possui qualquer base factual ou técnica.</em></p>
+                    
+                    <h4 style="color: #1e3a8a; margin: 1rem 0 0.5rem 0;">🕵️‍♂️ Encontre os Erros Desta Publicação:</h4>
+                    <ul>
+                        <li><strong>Generalização Absoluta:</strong> Tenta afirmar falsamente que 100% dos equipamentos atuam de forma ilícita.</li>
+                        <li><strong>Ausência de Crédito:</strong> Não apresenta fontes oficiais ou identificação dos autores do texto.</li>
+                        <li><strong>Falta de Provas:</strong> Não exibe laudos, documentos ou evidências palpáveis da acusação.</li>
+                        <li><strong>Linguagem Alarmista:</strong> Estruturada especificamente para despertar pânico e inflar o engajamento de forma artificial.</li>
+                    </ul>
+
+                    <div style="background-color: #ecfdf5; border: 1px solid #a7f3d0; padding: 1rem; border-radius: 6px; margin-top: 1.5rem;">
+                        <h4 style="color: #065f46; margin-bottom: 0.5rem;">✅ Antes de compartilhar, faça 3 perguntas:</h4>
+                        <ol style="margin-bottom: 0; color: #065f46;">
+                            <li>Quem realmente publicou essa informação?</li>
+                            <li>Existem provas documentadas ou outras fontes confiáveis replicando o assunto?</li>
+                            <li>Essa mensagem respeita o sigilo e a privacidade das pessoas?</li>
+                        </ol>
+                    </div>
+                </div>
+                <p style="text-align: center; margin-top: 1.5rem; font-weight: 600; color: #0d9488;">"Uma internet mais segura começa com as nossas atitudes!"</p>
+            </div>
+
+            <div id="conclusao" class="tab-content">
+                <h2>6. Conclusão e Referências do Grupo</h2>
+                
+                <h3>Principais Aprendizados do Desafio</h3>
+                <p>A conclusão coletiva da nossa equipe reforça que o avanço tecnológico na agropecuária deve, obrigatoriamente, andar em sinergia com os direitos fundamentais do indivíduo. Aprendemos que frear e analisar de forma crítica qualquer informação suspeita ou de grande impacto social é uma obrigação civil na era da informação.</p>
+                
+                <div style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); color: white; padding: 1.5rem; border-radius: 8px; text-align: center; margin: 2rem 0; font-size: 1.2rem; font-weight: 700;">
+                    💬 MENSAGEM FINAL DA EQUIPE:<br>
+                    "Antes de compartilhar qualquer conteúdo: Pare, Pense e Verifique!"
+                </div>
+
+                <h3>Referências Oficiais Consultadas:</h3>
+                <p>Para construir esta análise e fundamentar o guia prático, recomendamos a consulta aos canais oficiais abaixo:</p>
+                
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <div>
+                        <strong>🔒 ANPD (Autoridade Nacional de Proteção de Dados):</strong><br>
+                        <a href="https://www.gov.br/anpd" target="_blank" class="link-ref">Acessar ANPD</a>
+                    </div>
+                    <div style="margin-top: 0.5rem;">
+                        <strong>✈️ ANAC (Agência Nacional de Aviação Civil):</strong><br>
+                        <a href="https://www.gov.br/anac" target="_blank" class="link-ref">Acessar ANAC</a>
+                    </div>
+                    <div style="margin-top: 0.5rem;">
+                        <strong>🌐 Portal Gov.br (Cidadania Digital):</strong><br>
+                        <a href="https://www.gov.br" target="_blank" class="link-ref">Acessar Gov.br</a>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
 
-    <div id="result" class="result hidden"></div>
+    <footer>
+        <p>&copy; 2026 - Código da Roça | Desenvolvido para a Feira de Práticas Tecnológicas do CEEP Agrícola.</p>
+    </footer>
 
-    <div class="notice">
-      <strong>Importante:</strong> uma IA pode cometer erros. Use o resultado como orientação e confira fontes confiáveis antes de compartilhar uma informação.
-    </div>
-  </div>
-</section>
+    <script>
+        function openTab(evt, tabId) {
+            const tabContents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove("active");
+            }
 
-<section id="quiz" class="tab">
-  <div class="card quiz-card">
-    <h2>Módulo Interativo: Campanha de Combate aos Erros</h2>
-    <p>Responda às perguntas abaixo para testar seus conhecimentos e identificar boatos sobre tecnologias no campo. O sistema validará se sua resposta está correta imediatamente!</p>
-    <div id="questions"></div>
-    <div class="score" id="score">Respostas Corretas: 0 de 3</div>
-  </div>
-</section>
-</main>
+            const tabBtns = document.getElementsByClassName("tab-btn");
+            for (let i = 0; i < tabBtns.length; i++) {
+                tabBtns[i].classList.remove("active");
+            }
 
-<footer>
-  <p>© 2026 - Projeto Desenvolvido pela Equipe "Código da Roça" - CEEP Agrícola</p>
-  <p>Referências oficiais: ANPD | ANAC | Gov.br</p>
-</footer>
-
-<script>
-const navButtons = document.querySelectorAll(".nav-btn");
-const tabs = document.querySelectorAll(".tab");
-
-navButtons.forEach(btn => {
-  btn.addEventListener("click", () => {
-    navButtons.forEach(b => b.classList.remove("active"));
-    tabs.forEach(t => t.classList.remove("active"));
-    btn.classList.add("active");
-    document.getElementById(btn.dataset.tab).classList.add("active");
-    window.scrollTo({top: 0, behavior: "smooth"});
-  });
-});
-
-const claim = document.getElementById("claim");
-const count = document.getElementById("count");
-const verifyBtn = document.getElementById("verifyBtn");
-const loading = document.getElementById("loading");
-const result = document.getElementById("result");
-
-claim.addEventListener("input", () => count.textContent = claim.value.length);
-
-verifyBtn.addEventListener("click", async () => {
-  const text = claim.value.trim();
-  if (!text) {
-    result.className = "result uncertain";
-    result.innerHTML = '<div class="result-title">⚠️ Digite uma informação</div><p>Escreva uma afirmação ou notícia para que ela possa ser analisada.</p>';
-    result.classList.remove("hidden");
-    return;
-  }
-
-  verifyBtn.disabled = true;
-  loading.classList.remove("hidden");
-  result.classList.add("hidden");
-
-  try {
-    const response = await fetch("/api/verify", {
-      method: "POST",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify({claim: text})
-    });
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.error || "Não foi possível realizar a análise.");
-
-    const cls = data.verdict === "VERDADEIRA" ? "true" : data.verdict === "FALSA" ? "false" : "uncertain";
-    const icon = cls === "true" ? "🟢" : cls === "false" ? "🔴" : "🟡";
-    let html = `<div class="result-title">${icon} ${escapeHtml(data.verdict)}</div>`;
-    html += `<p><strong>Análise:</strong> ${escapeHtml(data.explanation || "")}</p>`;
-    if (data.true_information) {
-      html += `<div class="truth-box"><strong>O que é verdadeiro:</strong><br>${escapeHtml(data.true_information)}</div>`;
-    }
-    if (Array.isArray(data.sources) && data.sources.length) {
-      html += `<div class="sources"><strong>📚 Fontes indicadas:</strong>`;
-      for (const s of data.sources) {
-        const label = escapeHtml(s.title || s.url || "Fonte");
-        const url = safeUrl(s.url);
-        html += url ? `<a href="${url}" target="_blank" rel="noopener noreferrer">${label}</a>` : `<div>${label}</div>`;
-      }
-      html += `</div>`;
-    }
-    result.className = `result ${cls}`;
-    result.innerHTML = html;
-    result.classList.remove("hidden");
-  } catch (err) {
-    result.className = "result uncertain";
-    result.innerHTML = `<div class="result-title">🟡 Não foi possível concluir</div><p>${escapeHtml(err.message)}</p><p>Confira se a API está configurada na Vercel e tente novamente.</p>`;
-    result.classList.remove("hidden");
-  } finally {
-    loading.classList.add("hidden");
-    verifyBtn.disabled = false;
-  }
-});
-
-function escapeHtml(value) {
-  return String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
-}
-function safeUrl(value) {
-  try {
-    const u = new URL(value);
-    return ["http:","https:"].includes(u.protocol) ? u.href : "";
-  } catch { return ""; }
-}
-
-const questions = [
-  {
-    q:"De acordo com o projeto, qual é a principal causa-raiz para o espalhamento do boato dos drones?",
-    options:["A) Mau funcionamento mecânico dos drones.","B) A falta de verificação das informações antes de compartilhá-las.","C) O uso exclusivo de inteligência artificial avançada pelas fazendas."],
-    answer:1
-  },
-  {
-    q:"Qual impacto social é gerado quando produtores recusam novas tecnologias por medo de boatos?",
-    options:["A) Impacto Emocional.","B) Impacto Econômico.","C) Impacto Ambiental."],
-    answer:1
-  },
-  {
-    q:"Quais são as três perguntas de ouro recomendadas pela equipe antes de compartilhar uma mensagem?",
-    options:["A) Qual o preço do drone? Quem é o fabricante? Ele filma em HD?","B) O vizinho tem internet? A plantação é grande? Quantos robôs existem lá?","C) Quem publicou? Existem provas e outras fontes? Respeita a privacidade?"],
-    answer:2
-  }
-];
-
-let score = 0;
-const qContainer = document.getElementById("questions");
-questions.forEach((item, qi) => {
-  const box = document.createElement("div");
-  box.className = "question";
-  box.innerHTML = `<h4>${qi+1}. ${item.q}</h4>`;
-  item.options.forEach((opt, oi) => {
-    const b = document.createElement("button");
-    b.className = "option";
-    b.textContent = opt;
-    b.addEventListener("click", () => {
-      if (box.dataset.done) return;
-      box.dataset.done = "1";
-      if (oi === item.answer) { b.classList.add("selected","correct"); score++; }
-      else {
-        b.classList.add("selected","wrong");
-        box.querySelectorAll(".option")[item.answer].classList.add("selected","correct");
-      }
-      document.getElementById("score").textContent = `Respostas Corretas: ${score} de 3`;
-    });
-    box.appendChild(b);
-  });
-  qContainer.appendChild(box);
-});
-
-</script>
+            document.getElementById(tabId).classList.add("active");
+            evt.currentTarget.classList.add("active");
+            
+            if(window.innerWidth <= 850) {
+                document.querySelector('.content-panel').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    </script>
 </body>
 </html>
