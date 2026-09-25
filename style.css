@@ -1,5 +1,5 @@
 
-
+style{
 *{box-sizing:border-box}
 body{margin:0;background:#f3f7f6;color:#123b68;font-family:Arial,Helvetica,sans-serif;font-size:16px}
 .hero{background:linear-gradient(115deg,#2563eb,#6195f7);color:#fff;text-align:center;padding:36px 20px 38px}
@@ -43,3 +43,4 @@ textarea:focus{outline:2px solid #79b5f5;border-color:#1774d0}
 .score{background:#e3f4ff;color:#0568c9;text-align:center;font-weight:800;font-size:20px;padding:20px;border-radius:8px;margin-top:20px}
 footer{text-align:center;color:#5c7187;font-size:13px;padding:0 20px 40px}footer p{margin:8px}
 @media(max-width:700px){.hero h1{font-size:29px}.hero{padding:28px 14px}.hero p{font-size:16px}.meta{line-height:1.8}.nav{justify-content:flex-start}.nav-btn{padding:0 13px;font-size:14px}main{margin-top:18px}.card{padding:25px 20px}h2{font-size:22px}table{font-size:14px}th,td{padding:10px 8px}.verifier-card{padding:25px 18px}}
+}
